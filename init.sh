@@ -23,18 +23,18 @@ aws ec2 wait volume-in-use --volume-ids $volume_id
 until [ -e /dev/xvdb ]; do
     sleep 1
 done
-mkdir /home/$username
-mount /dev/xvdb /home/$username
+sudo mkdir /home/$username
+sudo mount /dev/xvdb /home/$username
 
 # add user
-useradd -d /home/$username -s /bin/bash $username
-gpasswd -a $username sudo
-cp -arpf /home/ec2-user/.ssh/authorized_keys /home/$username/.ssh/authorized_keys
-chown $username /home/$username
-chgrp $username /home/$username
-chown -R $username /home/$username/.ssh
-chgrp -R $username /home/$username/.ssh
-echo "$username:$password" | chpasswd
+sudo useradd -d /home/$username -s /bin/bash $username
+sudo gpasswd -a $username sudo
+sudo cp -arpf /home/ec2-user/.ssh/authorized_keys /home/$username/.ssh/authorized_keys
+sudo chown $username /home/$username
+sudo chgrp $username /home/$username
+sudo chown -R $username /home/$username/.ssh
+sudo chgrp -R $username /home/$username/.ssh
+echo "$username:$password" | sudo chpasswd
 
 # register route53
 curl https://raw.githubusercontent.com/SakuraCase/develop-env-ec2/master/dyndns.tmpl -O
@@ -44,8 +44,8 @@ aws route53 change-resource-record-sets --hosted-zone-id $hosted_zone_id --chang
 # ssh config
 curl https://raw.githubusercontent.com/SakuraCase/develop-env-ec2/master/sshd_config.tmpl -O
 sed -e s/{%port%}/$ssh_port/g sshd_config.tmpl > sshd_config.init
-cp sshd_config.init /etc/ssh/sshd_config
-systemctl restart sshd
+sudo cp sshd_config.init /etc/ssh/sshd_config
+sudo systemctl restart sshd
 
 # install
 sudo yum update -y
@@ -54,6 +54,3 @@ sudo yum install -y gcc-c++ make
 sudo yum install -y nodejs
 sudo npm install -g yarn
 sudo yum -y install git
-
-cd /
-userdel -r ec2-user
