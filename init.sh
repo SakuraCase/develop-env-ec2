@@ -28,7 +28,7 @@ sudo mount /dev/xvdb /home/$username
 
 # add user
 sudo useradd -d /home/$username -s /bin/bash $username
-sudo gpasswd -a $username sudo
+sudo usermod -aG wheel $username
 sudo cp -arpf /home/ec2-user/.ssh/authorized_keys /home/$username/.ssh/authorized_keys
 sudo chown $username /home/$username
 sudo chgrp $username /home/$username
