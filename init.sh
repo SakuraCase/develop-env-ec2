@@ -47,6 +47,10 @@ sed -e s/{%port%}/$ssh_port/g sshd_config.tmpl > sshd_config.init
 sudo cp sshd_config.init /etc/ssh/sshd_config
 sudo systemctl restart sshd
 
+
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+
 # install
 sudo yum update -y
 curl -sL https://rpm.nodesource.com/setup_13.x | sudo bash -
