@@ -58,7 +58,15 @@ sudo yum -y install git
 sudo yum install python3 -y
 sudo python3 -m pip install --upgrade pip
 hash -r
+pip3 install -U aws-sam-cli
+
+sudo amazon-linux-extras install -y docker
+sudo service docker start
+sudo usermod -a -G docker $username
+sudo chmod 666 /var/run/docker.sock
+sudo service docker restart
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
 echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
-
